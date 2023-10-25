@@ -1,4 +1,12 @@
 ====================
+Changes on this fork
+====================
+
+I forked and changed brainspace so that I can return and analyse the transformation matrices
+derived in the procrustes alignment (and the number of iterations used for alignment).
+
+
+====================
 BrainSpace
 ====================
 

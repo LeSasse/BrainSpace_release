@@ -57,7 +57,7 @@ def procrustes(source, target, center=False, scale=False):
     aligned = source.dot(t)
     if center:
         aligned += mt
-    return aligned
+    return (aligned, t)
 
 
 # Generalized procrustes analysis
@@ -105,8 +105,9 @@ def procrustes_alignment(data, reference=None, n_iter=10, tol=1e-5,
     dist = np.inf
     for i in range(n_iter):
         # Align to reference
-        aligned = [procrustes(d, reference) for d in data]
-
+        aligned_t = [procrustes(d, reference) for d in data]
+        aligned, t = list(zip(*aligned_t))
+        
         # Compute new mean
         new_reference = np.mean(aligned, axis=0)
 
@@ -124,7 +125,7 @@ def procrustes_alignment(data, reference=None, n_iter=10, tol=1e-5,
 
         dist = new_dist
 
-    return (aligned, reference) if return_reference else aligned
+    return (aligned, reference, t, n_iter) if return_reference else (aligned, t, n_iter)
 
 
 class ProcrustesAlignment(BaseEstimator):
@@ -169,7 +170,7 @@ class ProcrustesAlignment(BaseEstimator):
             Returns self.
         """
 
-        self.aligned_, self.mean_ = \
+        self.aligned_, self.mean_, self.t_, self.n_iter_ = \
             procrustes_alignment(data, reference=reference, tol=self.tol,
                                  n_iter=self.n_iter, return_reference=True,
                                  verbose=self.verbose)

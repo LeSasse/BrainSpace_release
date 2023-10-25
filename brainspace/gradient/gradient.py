@@ -192,7 +192,9 @@ class GradientMaps(BaseEstimator):
                 pa = ProcrustesAlignment(n_iter=n_iter)
                 pa.fit(self.gradients_, reference=reference)
                 self.aligned_ = pa.aligned_
-
+                self.t_ = pa.t_
+                self.n_iter_ = pa.n_iter_
+                
             elif isinstance(self.alignment, ProcrustesAlignment):
                 self.alignment.set_params(n_iter=n_iter)
                 self.alignment.fit(self.gradients_, reference=reference)
